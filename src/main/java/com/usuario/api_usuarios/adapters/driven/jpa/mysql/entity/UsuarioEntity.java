@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "usuarios")
 @AllArgsConstructor
@@ -18,13 +20,33 @@ public class UsuarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_usuario;
 
+    @Column(nullable = false)
     private String nombre;
+
+    @Column(nullable = false)
     private String apellido;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false, unique = true)
+    private String documentoDeIdentidad;
+
+    @Column(nullable = false)
+    private String celular;
+
+    @Column(nullable = false)
     private String contraseña;
-    private String fecha_creacion;
+
+    @Column(nullable = false)
+    private LocalDate fechaNacimiento;
+
+    @Column(nullable = false)
+    private LocalDate fecha_creacion;
 
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
     private RolEntity rolEntity;
+
+    // Método adicional para la verificación de edad y validaciones deben estar en la capa de servicio
 }

@@ -1,4 +1,4 @@
-package com.usuario.api_usuarios.domain.model;
+package com.usuario.api_usuarios.adapters.driving.http.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,17 +11,12 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario {
-
-    private Long id;
+public class UsuarioRequest {
     private String nombre;
     private String apellido;
     private String email;
-    private String documentoDeIdentidad; // Añadido
-    private String celular; // Añadido
     private String contraseña;
-    private LocalDate fechaNacimiento; // Cambiado a fechaNacimiento
+    private String celular;
     private LocalDate fechaCreacion;
-    private Rol rol; // Asegúrate de que la clase Rol esté en el paquete correcto
-
+    private String documentoDeIdentidad;
 }
