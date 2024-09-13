@@ -6,4 +6,6 @@ public class ErrorConstants {
     public static final String EMAIL_ERROR = "Email inválido";
     public static final String INVALID_USER = "El usuario debe ser mayor de edad";
     public static final String DATE_INVALID = "La fecha de nacimiento no puede ser nula.";
+    public static final String PHONE_ERROR = "El telefono no es correcto";
+    public static final String DOCUMENT_ERROR = "Documento invalido";
 }

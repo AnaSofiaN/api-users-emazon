@@ -2,6 +2,7 @@ package com.usuario.api_usuarios.domain.api.usecase;
 
 
 import com.usuario.api_usuarios.domain.exception.UsuarioException;
+import com.usuario.api_usuarios.domain.model.Rol;
 import com.usuario.api_usuarios.domain.model.Usuario;
 import com.usuario.api_usuarios.domain.spi.IUsuarioPersistencePort;
 import com.usuario.api_usuarios.domain.util.ErrorConstants;
@@ -18,29 +19,66 @@ public class UsuarioUseCase {
 
     public void createUsuarioAuxBodega(Usuario usuario) {
         // Validar campos obligatorios
-        if (!isEmailValid(usuario.getEmail())) {
-            throw new UsuarioException(ErrorConstants.EMAIL_ERROR);
-        }
-        if (!isMayorDeEdad(usuario)) {
-            throw new UsuarioException(ErrorConstants.INVALID_USER);
-        }
+        validateUsuario(usuario);
 
         // Cifrar la contraseña
-        String encryptedPassword = passwordEncoder.encode(usuario.getContraseña());
-        usuario.setContraseña(encryptedPassword);
+        String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
+        usuario.setContrasena(encryptedPassword);
+
+        // Asignar rol 'aux_bodega'
+        Rol rolAuxBodega = new Rol(2L, "aux_bodega", "Usuario de bodega"); // Asegúrate de que los ID y descripciones sean correctos
+        usuario.setRol(rolAuxBodega);
 
         // Guardar usuario con el rol 'aux_bodega'
         usuarioPersistencePort.saveUsuario(usuario);
     }
 
+    public void createUsuarioCliente(Usuario usuario) {
+        // Validar campos obligatorios
+        validateUsuario(usuario);
+
+        // Cifrar la contraseña
+        String encryptedPassword = passwordEncoder.encode(usuario.getContrasena());
+        usuario.setContrasena(encryptedPassword);
+
+        // Asignar rol 'cliente'
+        Rol rolCliente = new Rol(3L, "cliente", "Usuario cliente"); // Asegúrate de que los ID y descripciones sean correctos
+        usuario.setRol(rolCliente);
+
+        // Guardar usuario con el rol 'cliente'
+        usuarioPersistencePort.saveUsuario(usuario);
+    }
+
+    private void validateUsuario(Usuario usuario) {
+        if (!isEmailValid(usuario.getEmail())) {
+            throw new UsuarioException(ErrorConstants.EMAIL_ERROR);
+        }
+        if (!isTelefonoValido(usuario.getCelular())) {
+            throw new UsuarioException(ErrorConstants.PHONE_ERROR);
+        }
+        if (!isDocumentoValido(usuario.getDocumentoDeIdentidad())) {
+            throw new UsuarioException(ErrorConstants.DOCUMENT_ERROR);
+        }
+    }
+
     public Usuario authenticate(String email, String password) {
         Usuario usuario = usuarioPersistencePort.findUsuarioByEmail(email);
-        if (usuario == null || !passwordEncoder.matches(password, usuario.getContraseña())) {
+        if (usuario == null || !passwordEncoder.matches(password, usuario.getContrasena())) {
             throw new UsuarioException(ErrorConstants.ERR_VALIDATION);
         }
         return usuario;  // Devuelve el usuario si las credenciales son correctas
     }
 
+
+    private boolean isTelefonoValido(String telefono) {
+        // Validación del teléfono
+        return telefono.matches("\\+?[0-9]{1,13}");
+    }
+
+    private boolean isDocumentoValido(String documento) {
+        // Validación del documento de identidad
+        return documento.matches("[0-9]+");
+    }
     private boolean isEmailValid(String email) {
         // Validación del email
         return email.matches("[^@]+@[^\\.]+\\..+");

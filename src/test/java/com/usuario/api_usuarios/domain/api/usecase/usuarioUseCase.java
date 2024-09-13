@@ -35,7 +35,7 @@ class UsuarioUseCaseTest {
         Usuario usuario = new Usuario();
         usuario.setEmail("test@example.com");
         usuario.setFechaCreacion(LocalDate.now());
-        usuario.setContraseña("password123");
+        usuario.setContrasena("password123");
         usuario.setFechaNacimiento(LocalDate.of(2000, 1, 1)); // Mayor de edad
 
         when(passwordEncoder.encode("password123")).thenReturn("encryptedPassword");
@@ -43,7 +43,7 @@ class UsuarioUseCaseTest {
         usuarioUseCase.createUsuarioAuxBodega(usuario);
 
         verify(usuarioPersistencePort).saveUsuario(usuario);
-        assertEquals("encryptedPassword", usuario.getContraseña());
+        assertEquals("encryptedPassword", usuario.getContrasena());
     }
 
     @Test
@@ -51,7 +51,7 @@ class UsuarioUseCaseTest {
         Usuario usuario = new Usuario();
         usuario.setEmail("invalid-email");
         usuario.setFechaCreacion(LocalDate.now());
-        usuario.setContraseña("password123");
+        usuario.setContrasena("password123");
         usuario.setFechaNacimiento(LocalDate.of(2000, 1, 1)); // Mayor de edad
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
@@ -66,7 +66,7 @@ class UsuarioUseCaseTest {
         Usuario usuario = new Usuario();
         usuario.setEmail("test@example.com");
         usuario.setFechaCreacion(LocalDate.now());
-        usuario.setContraseña("password123");
+        usuario.setContrasena("password123");
         usuario.setFechaNacimiento(LocalDate.of(2005, 1, 1)); // Menor de edad
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
@@ -79,7 +79,7 @@ class UsuarioUseCaseTest {
     void authenticate_Success() {
         Usuario usuario = new Usuario();
         usuario.setEmail("test@example.com");
-        usuario.setContraseña("encryptedPassword");
+        usuario.setContrasena("encryptedPassword");
 
         when(usuarioPersistencePort.findUsuarioByEmail("test@example.com")).thenReturn(usuario);
         when(passwordEncoder.matches("password123", "encryptedPassword")).thenReturn(true);
@@ -105,7 +105,7 @@ class UsuarioUseCaseTest {
     void authenticate_InvalidPassword() {
         Usuario usuario = new Usuario();
         usuario.setEmail("test@example.com");
-        usuario.setContraseña("encryptedPassword");
+        usuario.setContrasena("encryptedPassword");
 
         when(usuarioPersistencePort.findUsuarioByEmail("test@example.com")).thenReturn(usuario);
         when(passwordEncoder.matches("password123", "encryptedPassword")).thenReturn(false);

@@ -19,7 +19,7 @@ public class Usuario {
     private String email;
     private String documentoDeIdentidad; // Añadido
     private String celular; // Añadido
-    private String contraseña;
+    private String contrasena;
     private LocalDate fechaNacimiento; // Cambiado a fechaNacimiento
     private LocalDate fechaCreacion;
     private Rol rol; // Asegúrate de que la clase Rol esté en el paquete correcto
