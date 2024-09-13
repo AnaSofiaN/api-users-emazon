@@ -25,18 +25,35 @@ public class UsuarioController {
         try {
             Usuario usuario = usuarioRequestMapper.usuarioModel(usuarioRequest);
 
-            // Establece fecha de creación si no se proporciona
             if (usuario.getFechaCreacion() == null) {
                 usuario.setFechaCreacion(LocalDate.now());
             }
 
             usuarioUseCase.createUsuarioAuxBodega(usuario);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado exitosamente");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario aux_bodega creado exitosamente");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @PostMapping("/crear-cliente")
+    public ResponseEntity<String> createUsuarioCliente(@RequestBody UsuarioRequest usuarioRequest) {
+        try {
+            Usuario usuario = usuarioRequestMapper.usuarioModel(usuarioRequest);
+
+            if (usuario.getFechaCreacion() == null) {
+                usuario.setFechaCreacion(LocalDate.now());
+            }
+
+            usuarioUseCase.createUsuarioCliente(usuario);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario cliente creado exitosamente");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 
     @PostMapping("/authenticate")
     public ResponseEntity<String> authenticate(@RequestParam String email,
